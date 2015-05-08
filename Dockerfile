@@ -1,26 +1,34 @@
-FROM debian:jessie
+# Dockerfile for Ember CLI, PhantomJS, and Bower
 
-MAINTAINER "Dylan Lindgren" <dylan.lindgren@gmail.com>
+FROM sebp/nodejs
+MAINTAINER Sebastien Pujadas http://pujadas.net
+ENV REFRESHED_AT 2015-05-08
 
 WORKDIR /tmp
 
-RUN apt-get update -y && \
-    apt-get install -y curl git && \
-    curl -sL https://deb.nodesource.com/setup | bash -  && \
-    apt-get install -y nodejs  && \
-    apt-get remove --purge curl -y  && \
-    apt-get clean  && \
-    npm install -g bower
+
+### install Ember CLI, PhantomJS, and Bower
+
+RUN npm install -g ember-cli \
+ && apt-get update -qq \
+ && apt-get install -qqy libfontconfig libfontconfig-dev libfreetype6-dev \
+ && npm install -g phantomjs \
+ && npm install -g bower
+
+
+### set up
 
 # For some strange reason Bower doesn't like running
 # without a /var/www directory! Even if we're running
 # it from a completely different directory! Strange!? 
-RUN mkdir -p /data/www /var/www && \
-    chown www-data:www-data /var/www
+RUN mkdir -p /data/www /var/www \
+ && chown www-data:www-data /var/www /data/www
+
 VOLUME ["/data"]
 WORKDIR /data/www
 
 USER www-data
+ENV HOME /data/www
 
-ENTRYPOINT ["bower"]
+ENTRYPOINT ["ember"]
 CMD ["help"]
