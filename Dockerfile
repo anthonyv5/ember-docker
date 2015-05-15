@@ -2,7 +2,7 @@
 
 FROM sebp/nodejs
 MAINTAINER Sebastien Pujadas http://pujadas.net
-ENV REFRESHED_AT 2015-05-08
+ENV REFRESHED_AT 2015-05-15
 
 WORKDIR /tmp
 

@@ -2,7 +2,7 @@
 
 This is a [Docker](http://www.docker.com) image for [Ember](http://emberjs.com/), [PhantomJS](http://phantomjs.org) and [Bower](http://bower.io), based on an image intended for use in the fashion described on [@dylanlindgren](https://twitter.com/dylanlindgren)'s series of blog articles about using Docker and the [Laravel PHP framework](http://www.laravel.com) together ([Docker for the Laravel framework](http://dylanlindgren.com/docker-for-the-laravel-framework), and [Beautiful Laravel Development with Docker & Fig](http://dylanlindgren.com/laravel-development-docker-fig)).
 
-An automated build for this repo is available on the [Docker Hub](https://registry.hub.docker.com/u/sebp/ember-docker).
+An automated build for this repo is available on the [Docker Hub](https://registry.hub.docker.com/u/sebp/ember).
 
 ### Contents
 
@@ -24,33 +24,33 @@ You can run Ember, PhantomJS and Bower commands using either Docker or Docker Co
 
 Running an Ember CLI command:
 
-	$ sudo docker run --privileged=true --rm sebp/ember-docker -p 4200:4200 *your Ember CLI commands here*
+	$ sudo docker run --privileged=true --rm sebp/ember -p 4200:4200 *your Ember CLI commands here*
 
 Running a PhantomJS command:
 
-	$ sudo docker run --privileged=true --rm sebp/ember-docker --entrypoint="phantomjs" *your PhantomJS commands here*
+	$ sudo docker run --privileged=true --rm sebp/ember --entrypoint="phantomjs" *your PhantomJS commands here*
 
 Running a PhantomJS command:
 
-	$ sudo docker run --privileged=true --rm sebp/ember-docker --entrypoint="bower" *your Bower commands here*
+	$ sudo docker run --privileged=true --rm sebp/ember --entrypoint="bower" *your Bower commands here*
 
 ### With Docker Compose
 
 Create the following entries in a `docker-compose.yml` file which you can run `docker-compose` against:
 
 	ember:
-	  image: sepb/ember-docker
+	  image: sepb/ember
 	  privileged: true
 	  ports:
 	    - "4200:4200"
 	 
 	phantomjs:
-	  image: sepb/ember-docker
+	  image: sepb/ember
 	  entrypoint: phantomjs
 	  privileged: true 
 	
 	bower:
-	  image: sepb/ember-docker
+	  image: sepb/ember
 	  entrypoint: bower
 	  privileged: true
 
@@ -92,7 +92,7 @@ You can define your working directory using one of the following methods:
 
 - Use the `working_dir` key in Docker Compose's `docker-compose.yml` file.   
 
-- Write your own `Dockerfile`, setting the base image to `sebp/ember-docker` (i.e. `FROM sebp/ember-docker`), and use the `WORKDIR` instruction. This option is the least flexible as you'll have to rebuild the Docker image each time you want to run Ember CLI, Bower or PhantomJS in a different directory.
+- Write your own `Dockerfile`, setting the base image to `sebp/ember` (i.e. `FROM sebp/ember`), and use the `WORKDIR` instruction. This option is the least flexible as you'll have to rebuild the Docker image each time you want to run Ember CLI, Bower or PhantomJS in a different directory.
 
 ## Building the image
 
