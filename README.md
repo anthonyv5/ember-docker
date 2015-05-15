@@ -24,15 +24,15 @@ You can run Ember, PhantomJS and Bower commands using either Docker or Docker Co
 
 Running an Ember CLI command:
 
-	$ sudo docker run --privileged=true --rm sebp/ember -p 4200:4200 *your Ember CLI commands here*
+	$ sudo docker run --privileged=true --rm -p 4200:4200 sebp/ember *your Ember CLI commands here*
 
 Running a PhantomJS command:
 
-	$ sudo docker run --privileged=true --rm sebp/ember --entrypoint="phantomjs" *your PhantomJS commands here*
+	$ sudo docker run --privileged=true --rm --entrypoint="phantomjs" sebp/ember *your PhantomJS commands here*
 
-Running a PhantomJS command:
+Running a Bower command:
 
-	$ sudo docker run --privileged=true --rm sebp/ember --entrypoint="bower" *your Bower commands here*
+	$ sudo docker run --privileged=true --rm --entrypoint="bower" sebp/ember *your Bower commands here*
 
 ### With Docker Compose
 
