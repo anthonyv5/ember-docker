@@ -9,11 +9,12 @@ WORKDIR /tmp
 
 ### install Ember CLI, PhantomJS, and Bower
 
-RUN npm install -g ember-cli \
- && apt-get update -qq \
- && apt-get install -qqy libfontconfig libfontconfig-dev libfreetype6-dev \
- && npm install -g phantomjs \
- && npm install -g bower
+# prerequisites
+RUN apt-get update \
+ && apt-get install -y libfontconfig libfontconfig-dev libfreetype6-dev \
+ && apt-get clean
+
+RUN npm install -g ember-cli@0.2.7 phantomjs bower
 
 
 ### set up
