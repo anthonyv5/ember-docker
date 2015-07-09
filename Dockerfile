@@ -14,7 +14,7 @@ RUN apt-get update \
  && apt-get install -y libfontconfig libfontconfig-dev libfreetype6-dev \
  && apt-get clean
 
-RUN npm install -g ember-cli@0.2.7 phantomjs bower
+RUN npm install -g ember-cli@1.13.1 phantomjs bower
 
 
 ### set up
