@@ -1,98 +1,49 @@
 # Docker image for Ember CLI, PhantomJS and Bower command-line tools
 
+[![](https://badge.imagelayers.io/sebp/ember:latest.svg)](https://imagelayers.io/?images=sebp/ember:latest 'Get your own badge on imagelayers.io')
+
 This is a [Docker](http://www.docker.com) image for [Ember](http://emberjs.com/), [PhantomJS](http://phantomjs.org) and [Bower](http://bower.io), based on an image intended for use in the fashion described on [@dylanlindgren](https://twitter.com/dylanlindgren)'s series of blog articles about using Docker and the [Laravel PHP framework](http://www.laravel.com) together ([Docker for the Laravel framework](http://dylanlindgren.com/docker-for-the-laravel-framework), and [Beautiful Laravel Development with Docker & Fig](http://dylanlindgren.com/laravel-development-docker-fig)).
 
 An automated build for this repo is available on the [Docker Hub](https://registry.hub.docker.com/u/sebp/ember).
 
 ### Contents
 
-- Running Ember, PhantomJS and Bower commands
-	- With Docker
-	- With Docker Compose
-	- Tip
-- Usage notes
-	- Running Ember, PhantomJS and Bower commands
+- Usage
 - Building the image
 - Notes
 - About
 
-## Running Ember, PhantomJS and Bower commands
+## Usage
 
-You can run Ember, PhantomJS and Bower commands using either Docker or Docker Compose.
+Ember, PhantomJS and Bower commands should be run within the container as the current user. Get the user ID of the current user using the following command:
 
-### With Docker
+	$ id -u
+	1000  
 
-Running an Ember CLI command:
+In the following commands, replace `<UID>` with whatever figure was returned (e.g. `1000` in the example above). 
 
-	$ sudo docker run --privileged=true --rm -p 4200:4200 sebp/ember *your Ember CLI commands here*
+Running an Ember CLI command in the current directory:
 
-Running a PhantomJS command:
+	$ sudo docker run --rm -p 4200:4200 -v $(pwd):/data -w /data \
+	  -u <UID> -e HOME=/data sebp/ember *your Ember CLI commands here*
 
-	$ sudo docker run --privileged=true --rm --entrypoint="phantomjs" sebp/ember *your PhantomJS commands here*
+Running a PhantomJS command in the current directory:
 
-Running a Bower command:
+	$ sudo docker run --rm -v $(pwd):/data -w /data \
+	  -u <UID> --entrypoint phantomjs sebp/ember *your PhantomJS commands here*
 
-	$ sudo docker run --privileged=true --rm --entrypoint="bower" sebp/ember *your Bower commands here*
+Running a Bower command in the current directory:
 
-### With Docker Compose
+	$ sudo docker run --rm -v $(pwd):/data -w /data \
+	  -u <UID> --entrypoint bower sebp/ember *your Bower commands here*
 
-Create the following entries in a `docker-compose.yml` file which you can run `docker-compose` against:
+For the sake of sanity, it is strongly recommended to create aliases, e.g.:
 
-	ember:
-	  image: sepb/ember
-	  privileged: true
-	  ports:
-	    - "4200:4200"
-	 
-	phantomjs:
-	  image: sepb/ember
-	  entrypoint: phantomjs
-	  privileged: true 
-	
-	bower:
-	  image: sepb/ember
-	  entrypoint: bower
-	  privileged: true
-
-Running an Ember CLI command:
-
-	$ sudo docker-compose run --rm ember *your Ember CLI commands here*
-
-Running a PhantomJS command:
-
-	$ sudo docker-compose run --rm phantomjs *your PhantomJS commands here*
-
-Running a PhantomJS command:
-
-	$ sudo docker-compose run --rm bower *your Bower commands here*
-
-### Tip 
-
-Whichever option you go with to run the commands, for the sake of sanity, it is strongly recommended to create aliases:
-
-	alias dember='sudo docker-compose run --rm ember'
-	alias dphantomjs='sudo docker-compose run --rm phantom'
-	alias dbower='sudo docker-compose run --rm bower'
+	alias dember='sudo docker run ... sebp/ember'
+	alias dphantomjs='sudo docker run ... sebp/phantom'
+	alias dbower='sudo docker run ... sebp/bower'
 
 To avoid recreating these aliases each time you start a new shell session, either add these lines to one of your shell's start-up files (e.g. `~/.bashrc` for Bash), or create a shell script with these three lines (e.g. `~/ember-aliases.sh`) and source it (i.e. `source ~/ember-aliases.sh` or . `~/ember/aliases.sh`) when you need to use the aliases.
-
-## Usage notes
-
-The image's default working directory is `/data/www`, which is also the default user's home directory, in which dot files will be created as needed. 
-
-### Running commands in specific directories
-
-This image uses a data volume, the mount point of which is `/data`.
-
-To run Ember CLI, Bower or PhantomJS, remember to set the image's working directory to wherever you want to run the command from **in the data volume**. For instance if you mapped the image's `/data` mount point to `/var/my-data` on your host and you want to run a command in `/var/my-data/www/public` on your host, then you need to set your working directory to `/data/www/public`.
-
-You can define your working directory using one of the following methods:
-
-- Run the `docker run` command with the `-w` (or `--workdir=""`) option.
-
-- Use the `working_dir` key in Docker Compose's `docker-compose.yml` file.   
-
-- Write your own `Dockerfile`, setting the base image to `sebp/ember` (i.e. `FROM sebp/ember`), and use the `WORKDIR` instruction. This option is the least flexible as you'll have to rebuild the Docker image each time you want to run Ember CLI, Bower or PhantomJS in a different directory.
 
 ## Building the image
 
